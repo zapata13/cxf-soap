@@ -2,7 +2,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:cxf="http://camel.apache.org/schema/cxf"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd     http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
-    
     <cxf:cxfEndpoint address="/simpleService" id="simpleServiceEndpoint" wsdlURL="classpath:wsdl/SAPOCWS.wsdl"/>
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
         <route id="_route1">
@@ -11,8 +10,9 @@
                 <simple>random(1,6)</simple>
             </setHeader>
             <setBody id="_setBody1">
-                <groovy>this.getClass().getResource( "/response/response${request.headers.randomResponse}.xml" ).text</groovy>
+                <simple>&lt;soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sim="http://www.example.org/SimpleService/"&gt;&lt;soapenv:Header/&gt;&lt;soapenv:Body&gt;&lt;sim:NewOperationResponse&gt;&lt;out&gt;hello&lt;/out&gt;&lt;/sim:NewOperationResponse&gt;&lt;/soapenv:Body&gt;&lt;/soapenv:Envelope&gt;</simple>
             </setBody>
+            <log id="_log1" message="${date:now:yyyyMMdd HH:mm:ss}  >>> ${body}"/>
         </route>
     </camelContext>
 </beans>
